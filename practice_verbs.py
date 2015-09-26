@@ -1,23 +1,23 @@
 from random import shuffle
-from pandas import read_csv
+from csv import reader as read
 
-verbs_df = read_csv("Verbs.csv")
+csv_file = open("Verbs.csv", "rb")
+reader = read(csv_file)
 
-def convert_df_to_dict(df):
-    dict = {}
-    for i in xrange(len(df)):
-        v_dict = df.loc[i].to_dict()
-        sep = "\xc2\xa0or\xc2\xa0"
-        if sep in df.loc[i]["past simple"]:
-            v_dict["past simple"] = df.loc[i]["past simple"].split(sep)
-        if sep in df.loc[i]["past participle"]:
-            v_dict["past participle"] = df.loc[i]["past participle"].split(sep)
-        dict[df.loc[i]["infinitive"]] = v_dict
-    return dict
+verbs = {}
+sep = "\xc2\xa0or\xc2\xa0"
 
-verbs = convert_df_to_dict(verbs_df)
+for row in reader:
+    infinitive, s_past, p_participle = row
+    if sep in s_past:
+        s_past = s_past.split(sep)
+    if sep in p_participle:
+        p_participle = p_participle.split(sep)
+    verbs[infinitive] = {"infinitive": infinitive, "simple past": s_past, "past participle": p_participle}
+
 verbs_list = verbs.keys()
 incorrect_verbs = []
+
 
 def display_options(options, data):
     while True:
