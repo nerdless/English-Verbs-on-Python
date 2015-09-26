@@ -13,7 +13,7 @@ for row in reader:
         s_past = s_past.split(sep)
     if sep in p_participle:
         p_participle = p_participle.split(sep)
-    verbs[infinitive] = {"infinitive": infinitive, "simple past": s_past, "past participle": p_participle}
+    verbs[infinitive] = {"infinitive": infinitive, "past simple": s_past, "past participle": p_participle}
 
 verbs_list = verbs.keys()
 incorrect_verbs = []
