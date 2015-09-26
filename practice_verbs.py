@@ -69,13 +69,13 @@ def practice_verbs(verbs_list):
         print "\n\n" + "Give me the correct tenses for " + str(verbs[verb]["infinitive"])
         
         print "infinitive"
-        infinitive = raw_input()
+        infinitive = raw_input().strip()
         
         print "past simple"
-        past = raw_input()
+        past = raw_input().strip()
         
         print "past participle"
-        past_participle = raw_input()
+        past_participle = raw_input().strip()
         
         right_inf = infinitive in verbs[verb]["infinitive"]
         right_past = past in verbs[verb]["past simple"]
