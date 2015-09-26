@@ -1,19 +1,21 @@
 from random import shuffle
-verbs = {"be": 		{"infinitive": "be", 		"past simple": ["was", "were"],			"past particle": "been"},
-        "beat": 	{"infinitive": "beat",	 	"past simple": "beat",				"past particle": "beaten"},
-        "become": 	{"infinitive": "become", 	"past simple": "became",			"past particle": "become"},
-        "begin": 	{"infinitive": "begin",		"past simple": "began",				"past particle": "begun"},
-        "bend": 	{"infinitive": "bend", 		"past simple": "bent",				"past particle": "bent"},
-        "bet": 		{"infinitive": "bet", 		"past simple": "bet",				"past particle": "bet"},
-        "bind": 	{"infinitive": "bind", 		"past simple": "bound",				"past particle": "bound"},
-        "bite": 	{"infinitive": "bite", 		"past simple": "bite",				"past particle": "bite"},
-        "blow": 	{"infinitive": "blow", 		"past simple": "blew",				"past particle": "blown"},
-        "break":	{"infinitive": "break", 	"past simple": "broke",				"past particle": "broken"},
-        "bring":	{"infinitive": "bring", 	"past simple": "bent",				"past particle": "bent"},
-        "broadcast":	{"infinitive": "broadcast",	"past simple": "broadcast",			"past particle": "broadcast"},
-        "build":	{"infinitive": "build",		"past simple": "built",				"past particle": "built"},
-        }
+from pandas import read_csv
 
+verbs_df = read_csv("Verbs.csv")
+
+def convert_df_to_dict(df):
+    dict = {}
+    for i in xrange(len(df)):
+        v_dict = df.loc[i].to_dict()
+        sep = "\xc2\xa0or\xc2\xa0"
+        if sep in df.loc[i]["past simple"]:
+            v_dict["past simple"] = df.loc[i]["past simple"].split(sep)
+        if sep in df.loc[i]["past participle"]:
+            v_dict["past participle"] = df.loc[i]["past participle"].split(sep)
+        dict[df.loc[i]["infinitive"]] = v_dict
+    return dict
+
+verbs = convert_df_to_dict(verbs_df)
 verbs_list = verbs.keys()
 incorrect_verbs = []
 
@@ -43,14 +45,14 @@ def display_options(options, data):
 
 def display_wrong(resp, verb, tense):
     if type(verbs[verb][tense]) is str:
-        print "Wrong, is not " + resp + "it is " + verbs[verb][tense]
+        print "Wrong, is not " + resp + " it is " + verbs[verb][tense]
     else:
-        print "Wrong, is not " + resp + "it is "
+        print "Wrong, is not " + resp + " it is "
         for tense in verbs[verb][tense]:
             print "or " + tense
     return verb
 
-def exit():
+def exit(data):
     print "Good bye!"
     
     
@@ -62,7 +64,7 @@ def practice_verbs(verbs_list):
     for verb in verbs_list:
         right_inf = False
         right_past = False
-        right_p_particle = False
+        right_p_participle = False
         
         print "\n\n" + "Give me the correct tenses for " + str(verbs[verb]["infinitive"])
         
@@ -72,12 +74,12 @@ def practice_verbs(verbs_list):
         print "past simple"
         past = raw_input()
         
-        print "past particle"
-        past_particle = raw_input()
+        print "past participle"
+        past_participle = raw_input()
         
         right_inf = infinitive in verbs[verb]["infinitive"]
         right_past = past in verbs[verb]["past simple"]
-        right_p_particle = past_particle in verbs[verb]["past particle"]
+        right_p_participle = past_participle in verbs[verb]["past participle"]
         
         if right_inf:
             print "Right " + infinitive
@@ -91,14 +93,14 @@ def practice_verbs(verbs_list):
             v = display_wrong(past, verb, "past simple")
             incorrect_verbs.append(v)
             
-        if right_p_particle:
-            print "Right " + past_particle
+        if right_p_participle:
+            print "Right " + past_participle
         else:
-            v = display_wrong(past_particle, verb, "past particle")
+            v = display_wrong(past_participle, verb, "past participle")
             incorrect_verbs.append(v)
     
-    fail_dict = {"text": "practice my fail verbs", "function": practice_verbs}
-    all_dict = {"text": "practice all verbs", "function": practice_verbs}
+    fail_dict = {"text": "practice my fail verbs", "verbs_list": incorrect_verbs}
+    all_dict = {"text": "practice all verbs", "verbs_list": verbs_list}
     exit_dict = {"text": "exit", "function": exit}
     main_options = [fail_dict, all_dict, exit_dict]
     print incorrect_verbs
