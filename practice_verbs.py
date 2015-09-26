@@ -29,7 +29,7 @@ def display_options(options, data):
 
         option = raw_input("\n")
 
-        if opction not in map(format, xrange(1, len(options) + 1)):
+        if option not in map(format, xrange(1, len(options) + 1)):
             print "Please choose an option from 1 to " + str(len(options))
             continue
         option_ix = int(option) - 1
@@ -52,7 +52,7 @@ def display_wrong(resp, verb, tense):
             print "or " + tense
     return verb
 
-def exit(data):
+def exit():
     print "Good bye!"
     
     
@@ -62,20 +62,23 @@ def practice_verbs(verbs_list):
     incorrect_verbs = []
     
     for verb in verbs_list:
-        right_inf = False
-        right_past = False
-        right_p_participle = False
-        
+
         print "\n\n" + "Give me the correct tenses for " + str(verbs[verb]["infinitive"])
         
         print "infinitive"
-        infinitive = raw_input().strip()
-        
+        infinitive = ""
+        while infinitive == "":
+            infinitive = raw_input().strip()
+
         print "past simple"
-        past = raw_input().strip()
+        past = ""
+        while past == "":
+            past = raw_input().strip()
         
         print "past participle"
-        past_participle = raw_input().strip()
+        past_participle = ""
+        while past_participle == "":
+            past_participle = raw_input().strip()
         
         right_inf = infinitive in verbs[verb]["infinitive"]
         right_past = past in verbs[verb]["past simple"]
